@@ -4,9 +4,12 @@ import com.example.demo.models.Employee;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,6 +17,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EmployeeControllerTest {
+
+    @InjectMocks
     private EmployeeController controller;
 
     @Mock
@@ -21,17 +26,17 @@ public class EmployeeControllerTest {
 
     @Before
     public void init() {
-        controller = new EmployeeController(service);
     }
 
     @Test
-    public void createEmployee() {
+    public void getEmployee() {
         final String id = "id";
         final var returnedEmployee = new Employee();
-        when(this.service.get(id)).thenReturn(returnedEmployee);
+        returnedEmployee.id = id;
+        when(this.service.get(id)).thenReturn(Optional.of(returnedEmployee));
 
-        final Employee result = this.controller.getEmployee(id);
+        final ResponseEntity<Employee> result = this.controller.getEmployee(id);
 
-        assertThat(result, is(returnedEmployee));
+        assertThat(result.getBody(), is(returnedEmployee));
     }
 }

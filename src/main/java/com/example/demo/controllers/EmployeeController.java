@@ -1,7 +1,15 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Employee;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("employees")
 public class EmployeeController {
     private EmployeeService service;
 
@@ -9,7 +17,11 @@ public class EmployeeController {
         this.service = service;
     }
 
-    public Employee getEmployee(String id) {
-        return service.get(id);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable("id") String id) {
+        final var optionalEmployee = service.get(id);
+        return optionalEmployee.map(ResponseEntity::ok)
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
