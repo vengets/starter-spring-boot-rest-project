@@ -17,4 +17,8 @@ public class EmployeeService {
     public Optional<Employee> get(String id) {
         return employeeRepository.findById(id);
     }
+
+    public Employee post(Employee employee) {
+        return employeeRepository.save(employee);
+    }
 }

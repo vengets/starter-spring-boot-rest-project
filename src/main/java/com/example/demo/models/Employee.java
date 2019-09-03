@@ -8,5 +8,6 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
+    public String name;
 }
 
